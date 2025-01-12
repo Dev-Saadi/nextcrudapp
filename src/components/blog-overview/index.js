@@ -1,9 +1,19 @@
 "use client";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddNewBlog from "../add-new-blog";
+import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
-const BlogOverview = () => {
+const BlogOverview = ({ blogList }) => {
   const initialBlogFormData = {
     title: "",
     description: "",
@@ -13,7 +23,11 @@ const BlogOverview = () => {
   const [loading, setloading] = useState(false);
   const [blogFormData, setBlogFormData] = useState(initialBlogFormData);
 
-  console.log(blogFormData);
+  const router = useRouter();
+
+  useEffect(() => {
+    router.refresh();
+  }, []);
 
   async function handleSaveBlogData() {
     try {
@@ -27,6 +41,7 @@ const BlogOverview = () => {
         setBlogFormData(initialBlogFormData);
         setopenDialogBox(false);
         setloading(false);
+        router.refresh();
       }
     } catch (error) {
       console.log(error);
@@ -47,7 +62,22 @@ const BlogOverview = () => {
         handleSaveBlogData={handleSaveBlogData}
       />
 
-      <h3>Blog List Section</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        {blogList && blogList.length > 0
+          ? blogList.map((item, key) => (
+              <Card key={key} className="p-5">
+                <CardContent>
+                  <CardTitle className="mb-5">{item.title}</CardTitle>
+                  <CardDescription>{item.description}</CardDescription>
+                  <div className="gap-5 flex mt-5 items-center">
+                    <Button>Edit</Button>
+                    <Button>Delete</Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          : null}
+      </div>
     </div>
   );
 };
