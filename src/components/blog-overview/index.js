@@ -25,10 +25,6 @@ const BlogOverview = ({ blogList }) => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    router.refresh();
-  }, []);
-
   async function handleSaveBlogData() {
     try {
       setloading(true);
@@ -47,6 +43,18 @@ const BlogOverview = ({ blogList }) => {
       console.log(error);
       setloading(false);
       setBlogFormData(initialBlogFormData);
+    }
+  }
+
+  async function handleDeteleBlogbyID(getCurrentId) {
+    try {
+      const apiResponse = await fetch(`/api/delete-blog?id=${getCurrentId}`, {
+        method: "DELETE",
+      });
+      const result = await apiResponse.json();
+      if (result.success) router.refresh();
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -71,7 +79,9 @@ const BlogOverview = ({ blogList }) => {
                   <CardDescription>{item.description}</CardDescription>
                   <div className="gap-5 flex mt-5 items-center">
                     <Button>Edit</Button>
-                    <Button>Delete</Button>
+                    <Button onClick={() => handleDeteleBlogbyID(item._id)}>
+                      Delete
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
