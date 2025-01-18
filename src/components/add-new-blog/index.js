@@ -20,6 +20,8 @@ const AddNewBlog = ({
   blogFormData,
   setBlogFormData,
   handleSaveBlogData,
+  currentEditBlogId,
+  setCurrentEditBlogId,
 }) => {
   return (
     <>
@@ -32,10 +34,22 @@ const AddNewBlog = ({
         </Button>
       </div>
 
-      <Dialog open={openDialogBox} onOpenChange={setopenDialogBox}>
+      <Dialog
+        open={openDialogBox}
+        onOpenChange={() => {
+          setopenDialogBox(false);
+          setBlogFormData({
+            title: "",
+            description: "",
+          });
+          setCurrentEditBlogId(null);
+        }}
+      >
         <DialogContent className="sm:max-w-[425px] bg-zinc-400">
           <DialogHeader>
-            <DialogTitle>Add New Blog</DialogTitle>
+            <DialogTitle>
+              {currentEditBlogId ? "Edit Blog" : "Add New Blog"}
+            </DialogTitle>
             {/* <DialogDescription>
               Make changes to your profile here. Click save when you're done.
             </DialogDescription> */}

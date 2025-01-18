@@ -13,6 +13,7 @@ export async function POST(req) {
     await connectToDataBase();
     const extractBlogData = await req.json();
     const { title, description } = extractBlogData;
+
     const { error } = AddNewBlog.validate({
       title,
       description,
